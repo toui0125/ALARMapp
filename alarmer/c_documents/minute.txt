@@ -1,0 +1,1 @@
+$replace分（$replace~$replace｜入力してエンターを押してください）

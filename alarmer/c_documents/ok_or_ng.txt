@@ -1,0 +1,4 @@
+$replace
+アラームを鳴らし始める時刻(START_ALARM_TIME)：$replace
+アラームを止める時刻（STOP_ALARM_TIME）：$replace
+アラームを何分ごとに鳴らすか(INTERVAL)：$replace
