@@ -243,7 +243,7 @@ class AlarmRobot(Robot):
     except ImportError:
       pass
     if music is None:
-      music = console.find_document('LGvoice.mp3')
+      music = console.find_document('sample.mp3')
 
     pygame.mixer.music.load(music)
     pygame.mixer.music.set_volume(DEFAULT_SOUND_VOLUME)
