@@ -53,12 +53,13 @@ class HistoryModel(DbModel):
       rows (list): DBファイルの内容
     """
     rows = self.curs.execute('select * from history').fetchall()
+    self.conn.commit()
 
     print('ID', end='　')
     print('START_ALARM_TIME', end='　')
     print('STOP_ALARM_TIME', end='　')
     print('INTERVAL')
-    for j in range(1, len(rows)):
+    for j in range(0, len(rows)):
       print(rows[j][0], end='')
       print('　　　', rows[j][1], end='')
       print('　　　　', rows[j][2], end='')

@@ -124,13 +124,14 @@ class AlarmRobot(Robot):
 
     is_exist = self.history_model.curs.execute('select START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL from history').fetchall()
     if not time_data in is_exist:
-      self.history_model.curs.execute(f'insert into history(START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL) values({time_data[0]},{time_data[1]},{time_data[2]})')
-      self.history_model.conn.commit()
+      self.history_model.curs.execute(f'insert into history(START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL) values("{time_data[0]}","{time_data[1]}","{time_data[2]}")')
+    self.history_model.conn.commit()
 
   
   def __use_past_settings(self):
     """履歴を使うかどうかを判別し、結果に応じてふさわしい関数を呼ぶ"""
     self.history_data = self.history_model.curs.execute('select * from history').fetchall()
+    self.history_model.conn.commit()
     
     if len(self.history_data) == 0:
       is_yes = False
@@ -172,7 +173,7 @@ class AlarmRobot(Robot):
       )
       user_id_choice = input(message)
 
-      for j in range(1, len(rows)):
+      for j in range(0, len(rows)):
         if user_id_choice == rows[j][0]:
           message = console.make_message_from_document(
             'ok_or_ng.txt',
