@@ -196,7 +196,7 @@ void AlarmRobot::fetch_past_settings()
         std::cout << message << std::endl;
 
         std::size_t found;
-        
+
         found = rows[i].history_column_start_alarm_time.find(":");
         if (found != std::string::npos) {
           std::string start_alarm_hour
