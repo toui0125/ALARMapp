@@ -2,7 +2,6 @@ from unittest import result
 from alarmer.views import console
 
 import pytest
-import string
 import termcolor
 
 
