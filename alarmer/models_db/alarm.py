@@ -99,7 +99,7 @@ class AlarmRobot(Robot):
     self.stop_alarm_minute = self._set_time(
       '', 'minute.txt', 0, 59
     )
-    self.interval_minute = self.__set_time(
+    self.interval_minute = self._set_time(
       '何分おきにアラームを鳴らしますか？\n', 'minute.txt', 5, 59
     )
 
@@ -122,15 +122,25 @@ class AlarmRobot(Robot):
       self.interval
     )
 
-    is_exist = self.history_model.curs.execute('select START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL from history').fetchall()
+    is_exist = self.history_model.curs.execute(
+      'select START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL from history'
+    ).fetchall()
     if not time_data in is_exist:
-      self.history_model.curs.execute(f'insert into history(START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL) values("{time_data[0]}","{time_data[1]}","{time_data[2]}")')
+      self.history_model.curs.execute(
+        f'insert into history (\
+          START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL\
+          ) values (\
+            "{time_data[0]}","{time_data[1]}","{time_data[2]}"\
+          )'
+      )
     self.history_model.conn.commit()
 
   
   def _use_past_settings(self):
     """履歴を使うかどうかを判別し、結果に応じてふさわしい関数を呼ぶ"""
-    self.history_data = self.history_model.curs.execute('select * from history').fetchall()
+    self.history_data = self.history_model.curs.execute(
+      'select * from history'
+    ).fetchall()
     self.history_model.conn.commit()
     
     if len(self.history_data) == 0:
