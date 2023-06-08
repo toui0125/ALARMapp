@@ -21,11 +21,11 @@ class DbModel(object):
 class HistoryModel(DbModel):
   """アラームの履歴を読み書きするクラス"""
   def __init__(self):
-    db_file = self.__get_db_file_name()
+    db_file = self._get_db_file_name()
     super().__init__(db_file)
 
   
-  def __get_db_file_name(self):
+  def _get_db_file_name(self):
     """DBファイルの名前を設定する
     
     Returns:

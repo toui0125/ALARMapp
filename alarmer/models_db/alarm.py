@@ -38,7 +38,7 @@ class AlarmRobot(Robot):
     del self.history_model
 
 
-  def __set_time(self, time_message, time_file, min_time, max_time):
+  def _set_time(self, time_message, time_file, min_time, max_time):
     """アラームの「時」や「分」を設定する
         
       Args:
@@ -83,20 +83,20 @@ class AlarmRobot(Robot):
     return time
 
 
-  def __set_all_time(self):
+  def _set_all_time(self):
     """アラームを鳴らし始める時刻、アラームを止める時刻、何分ごとにアラームを鳴らすか、
        を設定し、CSVファイルに書き込む関数を呼ぶ
     """
-    self.start_alarm_hour = self.__set_time(
+    self.start_alarm_hour = self._set_time(
       'アラームを鳴らし始めますか？', 'hour.txt', 0, 23
     )
-    self.start_alarm_minute = self.__set_time(
+    self.start_alarm_minute = self._set_time(
       '', 'minute.txt', 0, 59
     )
-    self.stop_alarm_hour = self.__set_time(
+    self.stop_alarm_hour = self._set_time(
       'アラームを止めますか？', 'hour.txt', 0, 23
     )
-    self.stop_alarm_minute = self.__set_time(
+    self.stop_alarm_minute = self._set_time(
       '', 'minute.txt', 0, 59
     )
     self.interval_minute = self.__set_time(
@@ -128,7 +128,7 @@ class AlarmRobot(Robot):
     self.history_model.conn.commit()
 
   
-  def __use_past_settings(self):
+  def _use_past_settings(self):
     """履歴を使うかどうかを判別し、結果に応じてふさわしい関数を呼ぶ"""
     self.history_data = self.history_model.curs.execute('select * from history').fetchall()
     self.history_model.conn.commit()
@@ -157,12 +157,12 @@ class AlarmRobot(Robot):
           continue
 
     if is_yes:
-      self.__fetch_past_settings()
+      self._fetch_past_settings()
     else:
-      self.__set_all_time()
+      self._set_all_time()
 
 
-  def __fetch_past_settings(self):
+  def _fetch_past_settings(self):
     """どの履歴を使用するか決定する"""
     rows = self.history_model.load_history()
     is_ok = False
@@ -215,7 +215,7 @@ class AlarmRobot(Robot):
         continue
 
 
-  def __alarm_date_delay(
+  def _alarm_date_delay(
     self, start_alarm_time, start_date_delay, stop_alarm_time, stop_date_delay):
     """アラームを鳴らす日付を遅らせる
           
@@ -234,7 +234,7 @@ class AlarmRobot(Robot):
       )
 
 
-  def __sound(self):
+  def _sound(self):
     """音を流す"""
     pygame.mixer.init()
     music = None
@@ -263,7 +263,7 @@ class AlarmRobot(Robot):
 
   def set_alarm(self):
     """アラームをセットし、鳴らす"""
-    self.__use_past_settings()
+    self._use_past_settings()
 
     now = datetime.datetime.now().time()
     sub_now = datetime.datetime.now()
@@ -285,34 +285,34 @@ class AlarmRobot(Robot):
 
     if now <= self.start_alarm_time and self.start_alarm_time <= self.stop_alarm_time:
       self.start_alarm_time, self.stop_alarm_time \
-        = self.__alarm_date_delay(self.start_alarm_time, 0, self.stop_alarm_time, 0)
+        = self._alarm_date_delay(self.start_alarm_time, 0, self.stop_alarm_time, 0)
 
     elif now <= self.stop_alarm_time and self.stop_alarm_time < self.start_alarm_time:
       self.start_alarm_time, self.stop_alarm_time \
-        = self.__alarm_date_delay(self.start_alarm_time, 0, self.stop_alarm_time, 1)
+        = self._alarm_date_delay(self.start_alarm_time, 0, self.stop_alarm_time, 1)
         
     elif self.stop_alarm_time < now and now <= self.start_alarm_time:
       self.start_alarm_time, self.stop_alarm_time \
-        = self.__alarm_date_delay(self.start_alarm_time, 0, self.stop_alarm_time, 1)
+        = self._alarm_date_delay(self.start_alarm_time, 0, self.stop_alarm_time, 1)
         
     elif self.start_alarm_time <= self.stop_alarm_time and self.stop_alarm_time < now:
       self.start_alarm_time, self.stop_alarm_time \
-        = self.__alarm_date_delay(self.start_alarm_time, 1, self.stop_alarm_time, 1)
+        = self._alarm_date_delay(self.start_alarm_time, 1, self.stop_alarm_time, 1)
         
     elif self.start_alarm_time < now and now <= self.stop_alarm_time:
       self.start_alarm_time, self.stop_alarm_time \
-        = self.__alarm_date_delay(self.start_alarm_time, 1, self.stop_alarm_time, 1)
+        = self._alarm_date_delay(self.start_alarm_time, 1, self.stop_alarm_time, 1)
         
     elif self.stop_alarm_time < self.start_alarm_time and self.start_alarm_time < now:
       self.start_alarm_time, self.stop_alarm_time \
-        = self.__alarm_date_delay(self.start_alarm_time, 1, self.stop_alarm_time, 2)
+        = self._alarm_date_delay(self.start_alarm_time, 1, self.stop_alarm_time, 2)
 
     wait_time = self.start_alarm_time - sub_now
     time.sleep(wait_time.seconds)
 
     while True:
       if self.start_alarm_time <= self.stop_alarm_time:
-        self.__sound()
+        self._sound()
       else:
         break
       time.sleep(self.interval.seconds - 60)

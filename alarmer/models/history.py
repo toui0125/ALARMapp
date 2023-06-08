@@ -20,12 +20,12 @@ class CsvModel(object):
 class HistoryModel(CsvModel):
   """アラームの履歴を読み書きするクラス"""
   def __init__(self):
-    csv_file = self.__get_csv_file_name()
+    csv_file = self._get_csv_file_name()
     super().__init__(csv_file)
     self.history_data = []
 
   
-  def __get_csv_file_name(self):
+  def _get_csv_file_name(self):
     """CSVファイルの名前を設定する
     
     Returns:

@@ -2,6 +2,8 @@ from unittest import result
 from alarmer.views import console
 
 import pytest
+import string
+import termcolor
 
 
 def test_get_document_dir_path():
@@ -16,10 +18,12 @@ def test2_find_document():
   with pytest.raises(console.NoDocumentError):
     console.find_document('sample.txt')
 
-@pytest.mark.skip(reason = 'I performed black-box and white-box testing')
+@pytest.mark.skip(reason = 'Next test is enough')
 def test_get_document():
   pass
 
-@pytest.mark.skip(reason = 'I performed black-box and white-box testing')
 def test_make_message_from_document():
-  pass
+  content = '='*60 + '\n12:12です。\nアラームを止めるには、controlとcを押してください。\n' + '='*60 + '\n'
+  contents = termcolor.colored(content, 'magenta')
+  result = console.make_message_from_document('hello.txt', 'magenta', sub_now = '12:12')
+  assert result == contents
