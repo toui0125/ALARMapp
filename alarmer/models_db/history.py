@@ -5,9 +5,9 @@ class DbModel(object):
   """DBファイルを扱うクラスの親クラス"""
   def __init__(self, db_file):
     self.db_file = db_file
-    self.conn = sqlite3.connect(self.db_file)
-    self.curs = self.conn.cursor()
-    self.curs.execute(
+    self.db_conn = sqlite3.connect(self.db_file)
+    self.db_curs = self.db_conn.cursor()
+    self.db_curs.execute(
       'create table if not exists history(\
         ID integer primary key autoincrement,\
         START_ALARM_TIME text,\
@@ -15,7 +15,7 @@ class DbModel(object):
         INTERVAL text\
       )'
     )
-    self.conn.commit()
+    self.db_conn.commit()
 
 
 class HistoryModel(DbModel):
@@ -52,8 +52,8 @@ class HistoryModel(DbModel):
     Returns:
       rows (list): DBファイルの内容
     """
-    rows = self.curs.execute('select * from history').fetchall()
-    self.conn.commit()
+    rows = self.db_curs.execute('select * from history').fetchall()
+    self.db_conn.commit()
 
     print('ID', end='　')
     print('START_ALARM_TIME', end='　')

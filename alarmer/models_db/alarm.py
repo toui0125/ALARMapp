@@ -34,7 +34,7 @@ class AlarmRobot(Robot):
 
   def __del__(self):
     pygame.quit()
-    self.history_model.conn.close()
+    self.history_model.db_conn.close()
     del self.history_model
 
 
@@ -116,14 +116,14 @@ class AlarmRobot(Robot):
     )
     print(message)
 
-    is_exist = self.history_model.curs.execute(
+    is_exist = self.history_model.db_curs.execute(
       f'select count(*) from history\
         where START_ALARM_TIME = "{self.start_alarm_time}",\
         STOP_ALARM_TIME = "{self.stop_alarm_time}",\
         INTERVAL = "{self.interval}"'
     ).fetchall()
     if is_exist == 0:
-      self.history_model.curs.execute(
+      self.history_model.db_curs.execute(
         f'insert into history (\
           START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL\
           ) values (\
@@ -132,15 +132,15 @@ class AlarmRobot(Robot):
             "{self.interval}"\
           )'
       )
-    self.history_model.conn.commit()
+    self.history_model.db_conn.commit()
 
   
   def _use_past_settings(self):
     """履歴を使うかどうかを判別し、結果に応じてふさわしい関数を呼ぶ"""
-    self.history_data = self.history_model.curs.execute(
+    self.history_data = self.history_model.db_curs.execute(
       'select * from history'
     ).fetchall()
-    self.history_model.conn.commit()
+    self.history_model.db_conn.commit()
     
     if len(self.history_data) == 0:
       is_yes = False
