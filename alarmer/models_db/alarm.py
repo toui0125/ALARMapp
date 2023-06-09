@@ -116,21 +116,20 @@ class AlarmRobot(Robot):
     )
     print(message)
 
-    time_data = (
-      self.start_alarm_time,
-      self.stop_alarm_time,
-      self.interval
-    )
-
     is_exist = self.history_model.curs.execute(
-      'select START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL from history'
+      f'select count(*) from history\
+        where START_ALARM_TIME = "{self.start_alarm_time}",\
+        STOP_ALARM_TIME = "{self.stop_alarm_time}",\
+        INTERVAL = "{self.interval}"'
     ).fetchall()
-    if not time_data in is_exist:
+    if is_exist == 0:
       self.history_model.curs.execute(
         f'insert into history (\
           START_ALARM_TIME, STOP_ALARM_TIME, INTERVAL\
           ) values (\
-            "{time_data[0]}","{time_data[1]}","{time_data[2]}"\
+            "{self.start_alarm_time}",\
+            "{self.stop_alarm_time}",\
+            "{self.interval}"\
           )'
       )
     self.history_model.conn.commit()
