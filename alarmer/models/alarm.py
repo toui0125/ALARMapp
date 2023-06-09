@@ -86,7 +86,7 @@ class AlarmRobot(Robot):
     """アラームを鳴らし始める時刻、アラームを止める時刻、何分ごとにアラームを鳴らすか、
        を設定し、CSVファイルに書き込む関数を呼ぶ
     """
-    self.start_alarm_hour = self.__set_time(
+    self.start_alarm_hour = self._set_time(
       'アラームを鳴らし始めますか？', 'hour.txt', 0, 23
     )
     self.start_alarm_minute = self._set_time(
