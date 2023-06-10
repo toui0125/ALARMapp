@@ -92,7 +92,7 @@ std::vector<HistoryColumn> HistoryModel::load_history_include_header()
     std::cout << rows[i].history_column_id;
     std::cout << "　　　　" << rows[i].history_column_start_alarm_time;
     std::cout << "　　　　　　" << rows[i].history_column_stop_alarm_time;
-    std::cout << "　　　　　" << rows[i].history_column_interval << std::endl;;
+    std::cout << "　　　　　" << rows[i].history_column_interval << std::endl;
   }
 
   in_csv_file.close();

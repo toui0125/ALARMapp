@@ -14,7 +14,9 @@ class TestHistoryModel(object):
     pass
 
   def test_load_histroy(self):
-    self.test_history_model.curs.execute('insert into history values(1, "10:10", "11:11", "12:12")')
+    self.test_history_model.db_curs.execute(
+      'insert into history values(1, "10:10", "11:11", "12:12")'
+    )
     result = self.test_history_model.load_history()
     assert result == [(1, "10:10", "11:11", "12:12")]
 

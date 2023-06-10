@@ -47,7 +47,7 @@ int AlarmRobot::set_time
     std::getline(std::cin, input);
     try {
       time = std::stoi(input);
-    } catch(std::invalid_argument&) {
+    } catch (std::invalid_argument&) {
       replace_word = {
         std::to_string(min_time) + "から" + std::to_string(max_time) + "までの整数を"
       };
