@@ -34,13 +34,29 @@ std::string find_document(const std::string& document_file_name)
 }
 
 
-std::string get_document(const std::string& document_file_name, const std::string& color)
+NoDocumentError::NoDocumentError(std::string err_msg)
+{
+  this->err_msg = err_msg;
+}
+
+
+const char* NoDocumentError::what()
+{
+  return (this->err_msg).c_str();
+}
+
+
+std::string get_document(const std::string& document_file_name,
+const std::string& color)
 {
   std::string document = find_document(document_file_name);
 
   std::ifstream document_file(document);
   if (!document_file) {
-    std::cout << "cannot find " << document << std::endl;
+    NoDocumentError* no_doc_err = new NoDocumentError(
+      "cannot find " + document
+    );
+    std::cout << no_doc_err->what() << std::endl;
     exit(1);
   };
   std::string content((std::istreambuf_iterator<char>(document_file)), std::istreambuf_iterator<char>());
